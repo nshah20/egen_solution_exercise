@@ -11,5 +11,14 @@
         "airbnb-base",
         "plugin:vue/recommended"
     ],
-    "rules": {}
+    "rules": {},
+    "overrides": [
+        {
+        "files": ["*"],
+        "rules": {
+            "max-len": "off",
+            "no-param-reassign": "off"
+            }
+        }
+    ]
 }
