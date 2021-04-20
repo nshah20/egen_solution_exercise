@@ -1,28 +1,244 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app
+    id="app"
+    :style="{background: $vuetify.theme.themes[theme].primary}"
+  >
+    <v-row>
+      <v-col cols="12">
+        <div id="pageHeader">
+          <v-row justify="start">
+            <v-col
+              justify="bottom"
+              cols="3"
+            >
+              <div id="pageHeaderDiv">
+                <h1 id="pageTitle">
+                  devjobs
+                </h1>
+              </div>
+            </v-col>
+            <v-col
+              cols="3"
+              offset-md="6"
+            >
+              <div id="switchWrapperDiv">
+                <v-switch v-model="themeValue" />
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row
+      v-if="!jobSelected"
+      id="filterRow"
+      class="ml-md-11"
+      cols="12"
+    >
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-text-field
+          v-model="jobCriteria"
+          :class="themeValue ? 'light-text-field' : ''"
+          prepend-inner-icon="mdi-magnify"
+          outlined
+          dense
+          label="Filter by title, companies, expertise..."
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="3"
+      >
+        <v-text-field
+          v-model="locationCriteria"
+          :class="themeValue ? 'light-text-field' : ''"
+          prepend-inner-icon="mdi-map-marker"
+          outlined
+          dense
+          label="Filter by location..."
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        md="2"
+      >
+        <div id="checkboxDiv">
+          <v-checkbox
+            v-model="fullTime"
+            :class="themeValue ? 'light-text-checkbox' : ''"
+            label="Full Time Only"
+          />
+        </div>
+      </v-col>
+      <v-col
+        cols="12"
+        md="3"
+      >
+        <v-btn
+          id="searchBtn"
+          color="#5865E0"
+          @click="filterByCriteria"
+        >
+          Search
+        </v-btn>
+      </v-col>
+    </v-row>
+    <DetailedJobInformation
+      v-if="jobSelected"
+      :theme-color="{primary: $vuetify.theme.themes[theme].primary, secondary: $vuetify.theme.themes[theme].secondary}"
+      :job-details="jobSelected"
+      @jobDescriptionClosed="closeJobModal"
+    />
+    <v-row
+      v-if="!jobSelected"
+      class="ml-10"
+      cols="12"
+    >
+      <v-col
+        v-for="(job,index) in filteredJobs"
+        id="jobInfo"
+        :key="index"
+        cols="12"
+        md="4"
+      >
+        <GeneralJobInformation
+          :theme-color="{primary: $vuetify.theme.themes[theme].primary, secondary: $vuetify.theme.themes[theme].secondary}"
+          :job-information="job"
+          @jobClicked="openJobDetailModal"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col offset-lg="9">
+        <v-btn
+          v-if="!jobSelected"
+          id="showMoreBtn"
+          color="#5865E0"
+          @click="getMoreJobs"
+        >
+          Show More
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-app>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapGetters } from 'vuex';
+import GeneralJobInformation from './components/GeneralJobInformation.vue';
+import DetailedJobInformation from './components/DetailedJobInformation.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    GeneralJobInformation,
+    DetailedJobInformation,
+  },
+  data: () => ({
+    currentPage: 1,
+    filteredJobs: null,
+    jobSelected: null,
+    jobCriteria: '',
+    locationCriteria: '',
+    fullTime: '',
+    themeValue: false,
+  }),
+  computed: {
+    ...mapGetters({
+      jobList: 'jobList',
+    }),
+    theme() {
+      return this.themeValue ? 'dark' : 'light';
+    },
+  },
+  created() {
+    this.$store
+      .dispatch('getJobList', this.currentPage)
+      .then(() => {
+        this.filterByCriteria();
+      });
+  },
+  methods: {
+    openJobDetailModal(job) {
+      this.jobSelected = job;
+    },
+    filterByCriteria() {
+      if (!this.jobCriteria && !this.locationCriteria && !this.fullTime) {
+        this.filteredJobs = this.jobList;
+      } else {
+        const jobCriteriaRegex = new RegExp(this.jobCriteria.split(' ').join('|'), 'i');
+        const locationCriteriaRegex = new RegExp(this.locationCriteria, 'i');
+        const fullTimeRegex = new RegExp(this.fullTime ? 'Full Time' : '', 'i');
+        this.filteredJobs = this.jobList.filter((job) => jobCriteriaRegex.test(`${job.company} ${job.title} ${job.description}`) && locationCriteriaRegex.test(job.location) && fullTimeRegex.test(job.type));
+      }
+    },
+    getMoreJobs() {
+      this.currentPage += 1;
+      this.$store
+        .dispatch('getJobList', this.currentPage)
+        .then((jobList) => {
+          if (jobList.length === 0) {
+            this.currentPage = 0;
+            this.getMoreJobs();
+          } else {
+            this.filterByCriteria();
+            this.$vuetify.goTo(0);
+          }
+        });
+    },
+    closeJobModal() {
+      this.jobSelected = null;
+    },
+  },
+};
 </script>
-
 <style>
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
 }
+#pageHeader{
+    background-color: #5865E0;
+}
+
+#jobInfo {
+    margin-bottom: 130px;
+}
+
+#searchBtn {
+    top: 7%;
+    left: -30%;
+    color: white;
+}
+
+#showMoreBtn {
+    color: white;
+}
+
+#checkboxDiv {
+    margin-top: -9px;
+}
+
+#pageTitle {
+    color: white;
+}
+
+.light-text-checkbox .v-label, .light-text-checkbox .v-icon{
+    color: white !important;
+}
+
+.light-text-field .v-label, .light-text-field .v-icon, .light-text-field fieldset{
+    color: white !important;
+}
+
+#switchWrapperDiv{
+    position: relative;
+    top: -10px;
+}
+
 </style>
