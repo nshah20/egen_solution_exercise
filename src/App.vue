@@ -3,18 +3,30 @@
     id="app"
     :style="{background: $vuetify.theme.themes[theme].colorScheme1}"
   >
-   <v-row class="pageHeader" :style="{color: $vuetify.theme.themes[theme].colorScheme1}">
-     <v-col align="start" offset-md="1" cols="8">
-       <div id="pageHeaderDiv">
-                <h1 id="pageTitle">
-                  devjobs
-                </h1>
-              </div>
-     </v-col>
-     <v-col cols="3">
-       <div id="themeSwitch"><v-switch :color="'white'" v-model="themeValue"/></div>
-     </v-col>
-   </v-row>
+    <v-row
+      class="pageHeader"
+      :style="{color: $vuetify.theme.themes[theme].colorScheme1}"
+    >
+      <v-col
+        align="start"
+        offset-md="1"
+        cols="8"
+      >
+        <div id="pageHeaderDiv">
+          <h1 id="pageTitle">
+            devjobs
+          </h1>
+        </div>
+      </v-col>
+      <v-col cols="3">
+        <div id="themeSwitch">
+          <v-switch
+            v-model="themeValue"
+            :color="'white'"
+          />
+        </div>
+      </v-col>
+    </v-row>
     <v-row
       v-if="!jobSelected"
       id="filterRow"
@@ -233,12 +245,8 @@ export default {
   color: #1976d2 !important;
 }
 
-
 .dark-text-field .v-label,.dark-text-field .v-text-field__slot label,.dark-text-field .v-icon, .dark-text-field fieldset, .v-text-field__slot input{
     color: black !important;
 }
-
-
-
 
 </style>
