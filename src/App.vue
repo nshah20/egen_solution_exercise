@@ -1,34 +1,20 @@
 <template>
   <v-app
     id="app"
-    :style="{background: $vuetify.theme.themes[theme].primary}"
+    :style="{background: $vuetify.theme.themes[theme].colorScheme1}"
   >
-    <v-row>
-      <v-col cols="12">
-        <div id="pageHeader">
-          <v-row justify="start">
-            <v-col
-              justify="bottom"
-              cols="3"
-            >
-              <div id="pageHeaderDiv">
+   <v-row class="pageHeader" :style="{color: $vuetify.theme.themes[theme].colorScheme1}">
+     <v-col align="start" offset-md="1" cols="8">
+       <div id="pageHeaderDiv">
                 <h1 id="pageTitle">
                   devjobs
                 </h1>
               </div>
-            </v-col>
-            <v-col
-              cols="3"
-              offset-md="6"
-            >
-              <div id="switchWrapperDiv">
-                <v-switch v-model="themeValue" />
-              </div>
-            </v-col>
-          </v-row>
-        </div>
-      </v-col>
-    </v-row>
+     </v-col>
+     <v-col cols="3">
+       <div id="themeSwitch"><v-switch :color="'white'" v-model="themeValue"/></div>
+     </v-col>
+   </v-row>
     <v-row
       v-if="!jobSelected"
       id="filterRow"
@@ -41,7 +27,7 @@
       >
         <v-text-field
           v-model="jobCriteria"
-          :class="themeValue ? 'light-text-field' : ''"
+          :class="themeValue ? 'light-text-field' : 'dark-text-field'"
           prepend-inner-icon="mdi-magnify"
           outlined
           dense
@@ -54,7 +40,7 @@
       >
         <v-text-field
           v-model="locationCriteria"
-          :class="themeValue ? 'light-text-field' : ''"
+          :class="themeValue ? 'light-text-field' : 'dark-text-field'"
           prepend-inner-icon="mdi-map-marker"
           outlined
           dense
@@ -68,7 +54,7 @@
         <div id="checkboxDiv">
           <v-checkbox
             v-model="fullTime"
-            :class="themeValue ? 'light-text-checkbox' : ''"
+            :class="themeValue ? 'light-text-checkbox' : 'dark-text-checkbox'"
             label="Full Time Only"
           />
         </div>
@@ -76,6 +62,7 @@
       <v-col
         cols="12"
         md="3"
+        align="end"
       >
         <v-btn
           id="searchBtn"
@@ -88,7 +75,7 @@
     </v-row>
     <DetailedJobInformation
       v-if="jobSelected"
-      :theme-color="{primary: $vuetify.theme.themes[theme].primary, secondary: $vuetify.theme.themes[theme].secondary}"
+      :theme-color="{colorScheme1: $vuetify.theme.themes[theme].colorScheme1, colorScheme2: $vuetify.theme.themes[theme].colorScheme2}"
       :job-details="jobSelected"
       @jobDescriptionClosed="closeJobModal"
     />
@@ -105,14 +92,14 @@
         md="4"
       >
         <GeneralJobInformation
-          :theme-color="{primary: $vuetify.theme.themes[theme].primary, secondary: $vuetify.theme.themes[theme].secondary}"
+          :theme-color="{colorScheme1: $vuetify.theme.themes[theme].colorScheme1, colorScheme2: $vuetify.theme.themes[theme].colorScheme2}"
           :job-information="job"
           @jobClicked="openJobDetailModal"
         />
       </v-col>
     </v-row>
     <v-row>
-      <v-col offset-lg="9">
+      <v-col offset-md="1">
         <v-btn
           v-if="!jobSelected"
           id="showMoreBtn"
@@ -171,7 +158,7 @@ export default {
         const jobCriteriaRegex = new RegExp(this.jobCriteria.split(' ').join('|'), 'i');
         const locationCriteriaRegex = new RegExp(this.locationCriteria, 'i');
         const fullTimeRegex = new RegExp(this.fullTime ? 'Full Time' : '', 'i');
-        this.filteredJobs = this.jobList.filter((job) => jobCriteriaRegex.test(`${job.company} ${job.title} ${job.description}`) && locationCriteriaRegex.test(job.location) && fullTimeRegex.test(job.type));
+        this.filteredJobs = this.jobList.filter((job) => jobCriteriaRegex.test(`${job.company} ${job.title}`) && locationCriteriaRegex.test(job.location) && fullTimeRegex.test(job.type));
       }
     },
     getMoreJobs() {
@@ -202,7 +189,13 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
 }
-#pageHeader{
+
+#themeSwitch{
+  position: relative;
+  top: -10px;
+}
+
+.pageHeader{
     background-color: #5865E0;
 }
 
@@ -229,16 +222,23 @@ export default {
 }
 
 .light-text-checkbox .v-label, .light-text-checkbox .v-icon{
-    color: white !important;
+    color: #1976d2 !important;
 }
 
-.light-text-field .v-label, .light-text-field .v-icon, .light-text-field fieldset{
-    color: white !important;
+.dark-text-checkbox .v-input--selection-controls__ripple{
+    color: black !important;
 }
 
-#switchWrapperDiv{
-    position: relative;
-    top: -10px;
+.light-text-field .v-text-field__slot input, .light-text-field .v-icon, .light-text-field .v-label, .light-text-field fieldset{
+  color: #1976d2 !important;
 }
+
+
+.dark-text-field .v-label,.dark-text-field .v-text-field__slot label,.dark-text-field .v-icon, .dark-text-field fieldset, .v-text-field__slot input{
+    color: black !important;
+}
+
+
+
 
 </style>

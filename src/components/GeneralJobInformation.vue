@@ -1,7 +1,7 @@
 <template>
   <v-card
-    :class="themeColor.primary === '#131822' ? 'light-card' : ''"
-    :color="themeColor.primary"
+    :class="themeColor.colorScheme1 === '#131822' ? 'light-card' : ''"
+    :color="themeColor.colorScheme1"
     height="300px"
     width="80%"
     @click="openJobDescription"
@@ -11,8 +11,7 @@
       :src="setImageAddress(jobInformation.company_logo)"
     >
     <v-row
-      id="jobInfoRow_1"
-      :style="{color: themeColor.secondary}"
+      :style="{color: themeColor.colorScheme2}"
     >
       <v-col cols="6">
         <h5>{{ formatDate(jobInformation.created_at) }}</h5>
@@ -22,24 +21,21 @@
       </v-col>
     </v-row>
     <v-row
-      id="jobInfoRow_2"
-      :style="{color: themeColor.secondary}"
+      :style="{color: themeColor.colorScheme2}"
     >
       <v-col cols="12">
         <h3>{{ jobInformation.title }}</h3>
       </v-col>
     </v-row>
     <v-row
-      id="jobInfoRow_3"
-      :style="{color: themeColor.secondary}"
+      :style="{color: themeColor.colorScheme2}"
     >
       <v-col cols="12">
         <h5>{{ jobInformation.company }}</h5>
       </v-col>
     </v-row>
     <v-row
-      id="jobInfoRow_4"
-      :style="{color: themeColor.secondary}"
+      :style="{color: themeColor.colorScheme2}"
     >
       <v-col cols="12">
         <h5><b>{{ jobInformation.location }}</b></h5>

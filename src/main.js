@@ -13,12 +13,12 @@ const vuetify = new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#F5F6F8',
-        secondary: 'black',
+        colorScheme1: '#F5F6F8',
+        colorScheme2: 'black',
       },
       dark: {
-        primary: '#131822',
-        secondary: '#FFFFFF',
+        colorScheme1: '#131822',
+        colorScheme2: '#FFFFFF',
       },
     },
   },

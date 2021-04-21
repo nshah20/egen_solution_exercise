@@ -9,23 +9,23 @@
       >
         <v-icon
           id="closeButton"
-          :style="{color: themeColor.secondary}"
+          :style="{color: themeColor.colorScheme2}"
           @click="closeDetailedJobDescription"
         >
           mdi-close-circle-outline
         </v-icon>
         <v-card
-          :class="themeColor.secondary === '#FFFFFF' ? 'light-text-card' : ''"
-          :color="themeColor.primary"
+          :class="themeColor.colorScheme2 === '#FFFFFF' ? 'light-text-card' : ''"
+          :color="themeColor.colorScheme1"
         >
           <img
             class="companyLogoDetailedInformation"
             :src="setImageAddress(jobDetails.company_logo)"
           >
-          <h4 :style="{color: themeColor.secondary}">
+          <h4 :style="{color: themeColor.colorScheme2}">
             {{ jobDetails.company }}
           </h4>
-          <h6 :style="{color: themeColor.secondary}">
+          <h6 :style="{color: themeColor.colorScheme2}">
             {{ jobDetails.company_url }}
           </h6>
           <v-btn
@@ -45,11 +45,11 @@
         class="offset-md-3"
       >
         <v-card
-          :class="themeColor.secondary === '#FFFFFF' ? 'light-text-card' : ''"
-          :color="themeColor.primary"
+          :class="themeColor.colorScheme2 === '#FFFFFF' ? 'light-text-card' : ''"
+          :color="themeColor.colorScheme1"
           class="mb-7"
         >
-          <v-row :style="{color: themeColor.secondary}">
+          <v-row :style="{color: themeColor.colorScheme2}">
             <v-col cols="5">
               <h5>{{ jobDetails.created_at }}</h5>
             </v-col>
@@ -60,7 +60,7 @@
               <h5>{{ jobDetails.type }}</h5>
             </v-col>
           </v-row>
-          <v-row :style="{color: themeColor.secondary}">
+          <v-row :style="{color: themeColor.colorScheme2}">
             <v-col cols="5">
               <h5>{{ jobDetails.title }}</h5>
             </v-col>
@@ -77,7 +77,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <v-row :style="{color: themeColor.secondary}">
+          <v-row :style="{color: themeColor.colorScheme2}">
             <v-col
               cols="3"
               class="offset-5"
@@ -85,7 +85,7 @@
               <h5>{{ jobDetails.location }}</h5>
             </v-col>
           </v-row>
-          <v-row :style="{color: themeColor.secondary}">
+          <v-row :style="{color: themeColor.colorScheme2}">
             <v-col cols="12">
               <div>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tempus, nunc quis ullamcorper volutpat, mauris leo dignissim mauris, rhoncus placerat quam leo ac ipsum. Sed tincidunt dictum nisl, id gravida urna finibus eu. Vivamus vel ligula imperdiet, faucibus massa egestas, ultrices nisl. Integer porttitor dui non nibh malesuada luctus. Nulla facilisi. Mauris vestibulum auctor dolor, vitae efficitur nulla tempus id. Pellentesque blandit dolor eu orci tempus egestas. Nam eu odio eu erat vehicula blandit et ac nulla.
@@ -93,7 +93,7 @@
               </div>
             </v-col>
           </v-row>
-          <v-row :style="{color: themeColor.secondary}">
+          <v-row :style="{color: themeColor.colorScheme2}">
             <v-col cols="12">
               <h2>Requirements</h2>
               <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tempus, nunc quis ullamcorper volutpat, mauris leo dignissim mauris, rhoncus placerat quam leo ac ipsum. Sed tincidunt dictum nisl, id gravida urna finibus eu. Vivamus vel ligula imperdiet, faucibus massa egestas, ultrices nisl. Integer porttitor dui non nibh malesuada luctus. Nulla facilisi. Mauris vestibulum auctor dolor, vitae efficitur nulla tempus id. Pellentesque blandit dolor eu orci tempus egestas. Nam eu odio eu erat vehicula blandit et ac nulla.</div>
@@ -113,7 +113,7 @@
               </ul>
             </v-col>
           </v-row>
-          <v-row :style="{color: themeColor.secondary}">
+          <v-row :style="{color: themeColor.colorScheme2}">
             <v-col cols="12">
               <h2>What You Will Do</h2>
               <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tempus, nunc quis ullamcorper volutpat, mauris leo dignissim mauris, rhoncus placerat quam leo ac ipsum. Sed tincidunt dictum nisl, id gravida urna finibus eu. Vivamus vel ligula imperdiet, faucibus massa egestas, ultrices nisl. Integer porttitor dui non nibh malesuada luctus. Nulla facilisi. Mauris vestibulum auctor dolor, vitae efficitur nulla tempus id. Pellentesque blandit dolor eu orci tempus egestas. Nam eu odio eu erat vehicula blandit et ac nulla.</div>
