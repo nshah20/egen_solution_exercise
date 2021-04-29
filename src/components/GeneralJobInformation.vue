@@ -67,8 +67,8 @@ export default {
 </script>
 <style>
     .companyLogo{
-        max-width: 20%;
-        height: auto;
+        height: 60px;
+        width:  60px;
         position: relative;
         left:-40%;
     }

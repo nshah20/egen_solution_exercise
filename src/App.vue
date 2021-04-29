@@ -1,11 +1,11 @@
 <template>
   <v-app
     id="app"
-    :style="{background: $vuetify.theme.themes[theme].colorScheme1}"
+    :style="{background: colorScheme1}"
   >
     <v-row
       class="pageHeader"
-      :style="{color: $vuetify.theme.themes[theme].colorScheme1}"
+      :style="{color: colorScheme1}"
     >
       <v-col
         align="start"
@@ -21,7 +21,7 @@
       <v-col cols="3">
         <div id="themeSwitch">
           <v-switch
-            v-model="themeValue"
+            v-model="darkMode"
             :color="'white'"
           />
         </div>
@@ -39,7 +39,7 @@
       >
         <v-text-field
           v-model="jobCriteria"
-          :class="themeValue ? 'light-text-field' : 'dark-text-field'"
+          :class="darkMode ? 'light-text-field' : 'dark-text-field'"
           prepend-inner-icon="mdi-magnify"
           outlined
           dense
@@ -52,7 +52,7 @@
       >
         <v-text-field
           v-model="locationCriteria"
-          :class="themeValue ? 'light-text-field' : 'dark-text-field'"
+          :class="darkMode ? 'light-text-field' : 'dark-text-field'"
           prepend-inner-icon="mdi-map-marker"
           outlined
           dense
@@ -66,7 +66,7 @@
         <div id="checkboxDiv">
           <v-checkbox
             v-model="fullTime"
-            :class="themeValue ? 'light-text-checkbox' : 'dark-text-checkbox'"
+            :class="darkMode ? 'light-text-checkbox' : 'dark-text-checkbox'"
             label="Full Time Only"
           />
         </div>
@@ -87,7 +87,7 @@
     </v-row>
     <DetailedJobInformation
       v-if="jobSelected"
-      :theme-color="{colorScheme1: $vuetify.theme.themes[theme].colorScheme1, colorScheme2: $vuetify.theme.themes[theme].colorScheme2}"
+      :theme-color="{colorScheme1: colorScheme1, colorScheme2: colorScheme2}"
       :job-details="jobSelected"
       @jobDescriptionClosed="closeJobModal"
     />
@@ -104,7 +104,7 @@
         md="4"
       >
         <GeneralJobInformation
-          :theme-color="{colorScheme1: $vuetify.theme.themes[theme].colorScheme1, colorScheme2: $vuetify.theme.themes[theme].colorScheme2}"
+          :theme-color="{colorScheme1: colorScheme1, colorScheme2: colorScheme2}"
           :job-information="job"
           @jobClicked="openJobDetailModal"
         />
@@ -112,16 +112,10 @@
     </v-row>
     <v-row>
       <v-col offset-md="1">
-        <v-btn
-          v-if="!jobSelected"
-          id="showMoreBtn"
-          color="#5865E0"
-          @click="getMoreJobs"
-        >
-          Show More
-        </v-btn>
       </v-col>
     </v-row>
+    <v-pagination v-if="!jobSelected" @input="getMoreJobs" v-model="page" :length="length">
+    </v-pagination>
   </v-app>
 </template>
 <script>
@@ -136,25 +130,32 @@ export default {
     DetailedJobInformation,
   },
   data: () => ({
-    currentPage: 1,
     filteredJobs: null,
     jobSelected: null,
     jobCriteria: '',
     locationCriteria: '',
     fullTime: '',
-    themeValue: false,
+    darkMode: false,
+    length: 5,
+    page: 1,
   }),
   computed: {
     ...mapGetters({
       jobList: 'jobList',
     }),
     theme() {
-      return this.themeValue ? 'dark' : 'light';
+      return this.darkMode ? 'dark' : 'light';
+    },
+    colorScheme1() {
+      return this.$vuetify.theme.themes[this.theme].colorScheme1;
+    },
+    colorScheme2() {
+      return this.$vuetify.theme.themes[this.theme].colorScheme2;
     },
   },
   created() {
     this.$store
-      .dispatch('getJobList', this.currentPage)
+      .dispatch('getJobList', this.page)
       .then(() => {
         this.filterByCriteria();
       });
@@ -174,12 +175,10 @@ export default {
       }
     },
     getMoreJobs() {
-      this.currentPage += 1;
       this.$store
-        .dispatch('getJobList', this.currentPage)
+        .dispatch('getJobList', this.page)
         .then((jobList) => {
           if (jobList.length === 0) {
-            this.currentPage = 0;
             this.getMoreJobs();
           } else {
             this.filterByCriteria();
